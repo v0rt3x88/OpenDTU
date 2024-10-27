@@ -4,7 +4,6 @@
  */
 #include "WebApi_inverter.h"
 #include "Configuration.h"
-#include "MqttHandleHass.h"
 #include "WebApi.h"
 #include "WebApi_errors.h"
 #include "defaults.h"
@@ -148,8 +147,6 @@ void WebApiInverterClass::onInverterAdd(AsyncWebServerRequest* request)
             inv->Statistics()->setStringMaxPower(c, inverter->channel[c].MaxChannelPower);
         }
     }
-
-    MqttHandleHass.forceUpdate();
 }
 
 void WebApiInverterClass::onInverterEdit(AsyncWebServerRequest* request)
@@ -267,8 +264,6 @@ void WebApiInverterClass::onInverterEdit(AsyncWebServerRequest* request)
             inv->Statistics()->setChannelFieldOffset(TYPE_DC, static_cast<ChannelNum_t>(c), FLD_YT, inverter.channel[c].YieldTotalOffset);
         }
     }
-
-    MqttHandleHass.forceUpdate();
 }
 
 void WebApiInverterClass::onInverterDelete(AsyncWebServerRequest* request)
@@ -309,8 +304,6 @@ void WebApiInverterClass::onInverterDelete(AsyncWebServerRequest* request)
     WebApi.writeConfig(retMsg, WebApiError::InverterDeleted, "Inverter deleted!");
 
     WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
-
-    MqttHandleHass.forceUpdate();
 }
 
 void WebApiInverterClass::onInverterOrder(AsyncWebServerRequest* request)

@@ -9,8 +9,6 @@ import HomeView from '@/views/HomeView.vue';
 import InverterAdminView from '@/views/InverterAdminView.vue';
 import LoginView from '@/views/LoginView.vue';
 import MaintenanceRebootView from '@/views/MaintenanceRebootView.vue';
-import MqttAdminView from '@/views/MqttAdminView.vue';
-import MqttInfoView from '@/views/MqttInfoView.vue';
 import NetworkAdminView from '@/views/NetworkAdminView.vue';
 import NetworkInfoView from '@/views/NetworkInfoView.vue';
 import NtpAdminView from '@/views/NtpAdminView.vue';
@@ -59,11 +57,6 @@ const router = createRouter({
             component: NtpInfoView,
         },
         {
-            path: '/info/mqtt',
-            name: 'MqTT',
-            component: MqttInfoView,
-        },
-        {
             path: '/info/console',
             name: 'Web Console',
             component: ConsoleInfoView,
@@ -77,11 +70,6 @@ const router = createRouter({
             path: '/settings/ntp',
             name: 'NTP Settings',
             component: NtpAdminView,
-        },
-        {
-            path: '/settings/mqtt',
-            name: 'MqTT Settings',
-            component: MqttAdminView,
         },
         {
             path: '/settings/inverter',

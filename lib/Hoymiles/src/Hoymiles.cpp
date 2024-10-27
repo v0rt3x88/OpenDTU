@@ -4,18 +4,7 @@
  */
 #include "Hoymiles.h"
 #include "Utils.h"
-#include "inverters/HERF_1CH.h"
-#include "inverters/HERF_2CH.h"
-#include "inverters/HERF_4CH.h"
-#include "inverters/HMS_1CH.h"
-#include "inverters/HMS_1CHv2.h"
-#include "inverters/HMS_2CH.h"
-#include "inverters/HMS_4CH.h"
-#include "inverters/HMT_4CH.h"
-#include "inverters/HMT_6CH.h"
 #include "inverters/HM_1CH.h"
-#include "inverters/HM_2CH.h"
-#include "inverters/HM_4CH.h"
 #include <Arduino.h>
 
 HoymilesClass Hoymiles;
@@ -148,30 +137,8 @@ void HoymilesClass::loop()
 std::shared_ptr<InverterAbstract> HoymilesClass::addInverter(const char* name, const uint64_t serial)
 {
     std::shared_ptr<InverterAbstract> i = nullptr;
-    if (HMT_4CH::isValidSerial(serial)) {
-        i = std::make_shared<HMT_4CH>(_radioCmt.get(), serial);
-    } else if (HMT_6CH::isValidSerial(serial)) {
-        i = std::make_shared<HMT_6CH>(_radioCmt.get(), serial);
-    } else if (HMS_4CH::isValidSerial(serial)) {
-        i = std::make_shared<HMS_4CH>(_radioCmt.get(), serial);
-    } else if (HMS_2CH::isValidSerial(serial)) {
-        i = std::make_shared<HMS_2CH>(_radioCmt.get(), serial);
-    } else if (HMS_1CH::isValidSerial(serial)) {
-        i = std::make_shared<HMS_1CH>(_radioCmt.get(), serial);
-    } else if (HMS_1CHv2::isValidSerial(serial)) {
-        i = std::make_shared<HMS_1CHv2>(_radioCmt.get(), serial);
-    } else if (HM_4CH::isValidSerial(serial)) {
-        i = std::make_shared<HM_4CH>(_radioNrf.get(), serial);
-    } else if (HM_2CH::isValidSerial(serial)) {
-        i = std::make_shared<HM_2CH>(_radioNrf.get(), serial);
-    } else if (HM_1CH::isValidSerial(serial)) {
+    if (HM_1CH::isValidSerial(serial)) {
         i = std::make_shared<HM_1CH>(_radioNrf.get(), serial);
-    } else if (HERF_1CH::isValidSerial(serial)) {
-        i = std::make_shared<HERF_1CH>(_radioNrf.get(), serial);
-    } else if (HERF_2CH::isValidSerial(serial)) {
-        i = std::make_shared<HERF_2CH>(_radioNrf.get(), serial);
-    } else if (HERF_4CH::isValidSerial(serial)) {
-        i = std::make_shared<HERF_4CH>(_radioNrf.get(), serial);
     }
 
     if (i) {

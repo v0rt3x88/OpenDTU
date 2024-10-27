@@ -8,11 +8,6 @@
 #include "InverterSettings.h"
 #include "Led_Single.h"
 #include "MessageOutput.h"
-#include "MqttHandleDtu.h"
-#include "MqttHandleHass.h"
-#include "MqttHandleInverter.h"
-#include "MqttHandleInverterTotal.h"
-#include "MqttSettings.h"
 #include "NetworkSettings.h"
 #include "NtpSettings.h"
 #include "PinMapping.h"
@@ -107,15 +102,6 @@ void setup()
     // Initialize SunPosition
     MessageOutput.print("Initialize SunPosition... ");
     SunPosition.init(scheduler);
-    MessageOutput.println("done");
-
-    // Initialize MqTT
-    MessageOutput.print("Initialize MqTT... ");
-    MqttSettings.init();
-    MqttHandleDtu.init(scheduler);
-    MqttHandleInverter.init(scheduler);
-    MqttHandleInverterTotal.init(scheduler);
-    MqttHandleHass.init(scheduler);
     MessageOutput.println("done");
 
     // Initialize WebApi

@@ -55,38 +55,6 @@ bool ConfigurationClass::write()
     ntp["longitude"] = config.Ntp.Longitude;
     ntp["sunsettype"] = config.Ntp.SunsetType;
 
-    JsonObject mqtt = doc["mqtt"].to<JsonObject>();
-    mqtt["enabled"] = config.Mqtt.Enabled;
-    mqtt["hostname"] = config.Mqtt.Hostname;
-    mqtt["port"] = config.Mqtt.Port;
-    mqtt["clientid"] = config.Mqtt.ClientId;
-    mqtt["username"] = config.Mqtt.Username;
-    mqtt["password"] = config.Mqtt.Password;
-    mqtt["topic"] = config.Mqtt.Topic;
-    mqtt["retain"] = config.Mqtt.Retain;
-    mqtt["publish_interval"] = config.Mqtt.PublishInterval;
-    mqtt["clean_session"] = config.Mqtt.CleanSession;
-
-    JsonObject mqtt_lwt = mqtt["lwt"].to<JsonObject>();
-    mqtt_lwt["topic"] = config.Mqtt.Lwt.Topic;
-    mqtt_lwt["value_online"] = config.Mqtt.Lwt.Value_Online;
-    mqtt_lwt["value_offline"] = config.Mqtt.Lwt.Value_Offline;
-    mqtt_lwt["qos"] = config.Mqtt.Lwt.Qos;
-
-    JsonObject mqtt_tls = mqtt["tls"].to<JsonObject>();
-    mqtt_tls["enabled"] = config.Mqtt.Tls.Enabled;
-    mqtt_tls["root_ca_cert"] = config.Mqtt.Tls.RootCaCert;
-    mqtt_tls["certlogin"] = config.Mqtt.Tls.CertLogin;
-    mqtt_tls["client_cert"] = config.Mqtt.Tls.ClientCert;
-    mqtt_tls["client_key"] = config.Mqtt.Tls.ClientKey;
-
-    JsonObject mqtt_hass = mqtt["hass"].to<JsonObject>();
-    mqtt_hass["enabled"] = config.Mqtt.Hass.Enabled;
-    mqtt_hass["retain"] = config.Mqtt.Hass.Retain;
-    mqtt_hass["topic"] = config.Mqtt.Hass.Topic;
-    mqtt_hass["individual_panels"] = config.Mqtt.Hass.IndividualPanels;
-    mqtt_hass["expire"] = config.Mqtt.Hass.Expire;
-
     JsonObject dtu = doc["dtu"].to<JsonObject>();
     dtu["serial"] = config.Dtu.Serial;
     dtu["poll_interval"] = config.Dtu.PollInterval;
@@ -230,38 +198,6 @@ bool ConfigurationClass::read()
     config.Ntp.Longitude = ntp["longitude"] | NTP_LONGITUDE;
     config.Ntp.SunsetType = ntp["sunsettype"] | NTP_SUNSETTYPE;
 
-    JsonObject mqtt = doc["mqtt"];
-    config.Mqtt.Enabled = mqtt["enabled"] | MQTT_ENABLED;
-    strlcpy(config.Mqtt.Hostname, mqtt["hostname"] | MQTT_HOST, sizeof(config.Mqtt.Hostname));
-    config.Mqtt.Port = mqtt["port"] | MQTT_PORT;
-    strlcpy(config.Mqtt.ClientId, mqtt["clientid"] | NetworkSettings.getApName().c_str(), sizeof(config.Mqtt.ClientId));
-    strlcpy(config.Mqtt.Username, mqtt["username"] | MQTT_USER, sizeof(config.Mqtt.Username));
-    strlcpy(config.Mqtt.Password, mqtt["password"] | MQTT_PASSWORD, sizeof(config.Mqtt.Password));
-    strlcpy(config.Mqtt.Topic, mqtt["topic"] | MQTT_TOPIC, sizeof(config.Mqtt.Topic));
-    config.Mqtt.Retain = mqtt["retain"] | MQTT_RETAIN;
-    config.Mqtt.PublishInterval = mqtt["publish_interval"] | MQTT_PUBLISH_INTERVAL;
-    config.Mqtt.CleanSession = mqtt["clean_session"] | MQTT_CLEAN_SESSION;
-
-    JsonObject mqtt_lwt = mqtt["lwt"];
-    strlcpy(config.Mqtt.Lwt.Topic, mqtt_lwt["topic"] | MQTT_LWT_TOPIC, sizeof(config.Mqtt.Lwt.Topic));
-    strlcpy(config.Mqtt.Lwt.Value_Online, mqtt_lwt["value_online"] | MQTT_LWT_ONLINE, sizeof(config.Mqtt.Lwt.Value_Online));
-    strlcpy(config.Mqtt.Lwt.Value_Offline, mqtt_lwt["value_offline"] | MQTT_LWT_OFFLINE, sizeof(config.Mqtt.Lwt.Value_Offline));
-    config.Mqtt.Lwt.Qos = mqtt_lwt["qos"] | MQTT_LWT_QOS;
-
-    JsonObject mqtt_tls = mqtt["tls"];
-    config.Mqtt.Tls.Enabled = mqtt_tls["enabled"] | MQTT_TLS;
-    strlcpy(config.Mqtt.Tls.RootCaCert, mqtt_tls["root_ca_cert"] | MQTT_ROOT_CA_CERT, sizeof(config.Mqtt.Tls.RootCaCert));
-    config.Mqtt.Tls.CertLogin = mqtt_tls["certlogin"] | MQTT_TLSCERTLOGIN;
-    strlcpy(config.Mqtt.Tls.ClientCert, mqtt_tls["client_cert"] | MQTT_TLSCLIENTCERT, sizeof(config.Mqtt.Tls.ClientCert));
-    strlcpy(config.Mqtt.Tls.ClientKey, mqtt_tls["client_key"] | MQTT_TLSCLIENTKEY, sizeof(config.Mqtt.Tls.ClientKey));
-
-    JsonObject mqtt_hass = mqtt["hass"];
-    config.Mqtt.Hass.Enabled = mqtt_hass["enabled"] | MQTT_HASS_ENABLED;
-    config.Mqtt.Hass.Retain = mqtt_hass["retain"] | MQTT_HASS_RETAIN;
-    config.Mqtt.Hass.Expire = mqtt_hass["expire"] | MQTT_HASS_EXPIRE;
-    config.Mqtt.Hass.IndividualPanels = mqtt_hass["individual_panels"] | MQTT_HASS_INDIVIDUALPANELS;
-    strlcpy(config.Mqtt.Hass.Topic, mqtt_hass["topic"] | MQTT_HASS_TOPIC, sizeof(config.Mqtt.Hass.Topic));
-
     JsonObject dtu = doc["dtu"];
     config.Dtu.Serial = dtu["serial"] | DTU_SERIAL;
     config.Dtu.PollInterval = dtu["poll_interval"] | DTU_POLL_INTERVAL;
@@ -352,11 +288,6 @@ void ConfigurationClass::migrate()
                 strlcpy(config.Inverter[i].channel[c].Name, "", sizeof(config.Inverter[i].channel[c].Name));
             }
         }
-    }
-
-    if (config.Cfg.Version < 0x00011800) {
-        JsonObject mqtt = doc["mqtt"];
-        config.Mqtt.PublishInterval = mqtt["publish_invterval"];
     }
 
     if (config.Cfg.Version < 0x00011900) {
