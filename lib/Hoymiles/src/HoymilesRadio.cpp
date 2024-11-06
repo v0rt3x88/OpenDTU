@@ -111,6 +111,39 @@ void HoymilesRadio::handleReceivedPackage()
                     inv->RadioStats.RxSuccess++;
                 }
 
+                int items = 5;
+                const char* names[items];
+                float values[items];
+                const char* units[items];
+
+                names[0] = inv->Statistics()->getChannelFieldName(TYPE_AC, CH0, FLD_PAC); //ac_power
+                names[1] = inv->Statistics()->getChannelFieldName(TYPE_AC, CH0, FLD_F);   //ac_freq
+                names[2] = inv->Statistics()->getChannelFieldName(TYPE_DC, CH0, FLD_UDC); //dc_voltage
+                names[3] = inv->Statistics()->getChannelFieldName(TYPE_DC, CH0, FLD_IDC); //dc_current
+                names[4] = inv->Statistics()->getChannelFieldName(TYPE_INV, CH0, FLD_T);  //inv_temp
+
+                values[0] = inv->Statistics()->getChannelFieldValue(TYPE_AC, CH0, FLD_PAC); //ac_power
+                values[1] = inv->Statistics()->getChannelFieldValue(TYPE_AC, CH0, FLD_F);   //ac_freq
+                values[2] = inv->Statistics()->getChannelFieldValue(TYPE_DC, CH0, FLD_UDC); //dc_voltage
+                values[3] = inv->Statistics()->getChannelFieldValue(TYPE_DC, CH0, FLD_IDC); //dc_current
+                values[4] = inv->Statistics()->getChannelFieldValue(TYPE_INV, CH0, FLD_T);  //inv_temp
+
+                units[0] = inv->Statistics()->getChannelFieldUnit(TYPE_AC, CH0, FLD_PAC); //ac_power
+                units[1] = inv->Statistics()->getChannelFieldUnit(TYPE_AC, CH0, FLD_F);   //ac_freq
+                units[2] = inv->Statistics()->getChannelFieldUnit(TYPE_DC, CH0, FLD_UDC); //dc_voltage
+                units[3] = inv->Statistics()->getChannelFieldUnit(TYPE_DC, CH0, FLD_IDC); //dc_current
+                units[4] = inv->Statistics()->getChannelFieldUnit(TYPE_INV, CH0, FLD_T);  //inv_temp
+
+                // print data to serial
+                Serial.println("------------------");
+                for (int i = 0; i < items; i++) {
+                    Serial.print(names[i]);
+                    Serial.print(": ");
+                    Serial.print(values[i]);
+                    Serial.print(" ");
+                    Serial.println(units[i]);
+                }
+
                 _commandQueue.pop();
                 _busyFlag = false;
             }
