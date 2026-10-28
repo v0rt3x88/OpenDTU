@@ -5,7 +5,6 @@
 #include "Led_Single.h"
 #include "Configuration.h"
 #include "Datastore.h"
-#include "MqttSettings.h"
 #include "NetworkSettings.h"
 #include "PinMapping.h"
 #include <Hoymiles.h>
@@ -74,8 +73,6 @@ void LedSingleClass::init(Scheduler& scheduler)
 void LedSingleClass::setLoop()
 {
     if (_allMode == LedState_t::On) {
-        const CONFIG_T& config = Configuration.get();
-
         // Update network status
         _ledMode[0] = LedState_t::Off;
 
@@ -84,7 +81,7 @@ void LedSingleClass::setLoop()
         }
 
         struct tm timeinfo;
-        if (getLocalTime(&timeinfo, 5) && (!config.Mqtt.Enabled || (config.Mqtt.Enabled && MqttSettings.getConnected()))) {
+        if (getLocalTime(&timeinfo, 5)) {
             _ledMode[0] = LedState_t::On;
         }
 

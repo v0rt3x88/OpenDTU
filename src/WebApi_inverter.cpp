@@ -4,7 +4,6 @@
  */
 #include "WebApi_inverter.h"
 #include "Configuration.h"
-#include "MqttHandleHass.h"
 #include "WebApi.h"
 #include "WebApi_errors.h"
 #include "defaults.h"
@@ -146,7 +145,6 @@ void WebApiInverterClass::onInverterAdd(AsyncWebServerRequest* request)
         }
     }
 
-    MqttHandleHass.forceUpdate();
 }
 
 void WebApiInverterClass::onInverterEdit(AsyncWebServerRequest* request)
@@ -270,7 +268,6 @@ void WebApiInverterClass::onInverterEdit(AsyncWebServerRequest* request)
         }
     }
 
-    MqttHandleHass.forceUpdate();
 }
 
 void WebApiInverterClass::onInverterDelete(AsyncWebServerRequest* request)
@@ -312,7 +309,6 @@ void WebApiInverterClass::onInverterDelete(AsyncWebServerRequest* request)
 
     WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
 
-    MqttHandleHass.forceUpdate();
 }
 
 void WebApiInverterClass::onInverterOrder(AsyncWebServerRequest* request)

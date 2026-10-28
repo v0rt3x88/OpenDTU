@@ -10,11 +10,6 @@
 #include "Led_Single.h"
 #include "Logging.h"
 #include "MessageOutput.h"
-#include "MqttHandleDtu.h"
-#include "MqttHandleHass.h"
-#include "MqttHandleInverter.h"
-#include "MqttHandleInverterTotal.h"
-#include "MqttSettings.h"
 #include "NetworkSettings.h"
 #include "NtpSettings.h"
 #include "PinMapping.h"
@@ -102,14 +97,6 @@ void setup()
     // Initialize SunPosition
     ESP_LOGI(TAG, "Initializing SunPosition...");
     SunPosition.init(scheduler);
-
-    // Initialize MqTT
-    ESP_LOGI(TAG, "Initializing MQTT...");
-    MqttSettings.init();
-    MqttHandleDtu.init(scheduler);
-    MqttHandleInverter.init(scheduler);
-    MqttHandleInverterTotal.init(scheduler);
-    MqttHandleHass.init(scheduler);
 
     // Initialize WebApi
     ESP_LOGI(TAG, "Initializing WebApi...");
