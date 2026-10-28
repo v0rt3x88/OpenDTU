@@ -4,4 +4,5 @@ export interface NtpConfig {
     latitude: number;
     longitude: number;
     sunsettype: number;
+    upload_grid_measurements: boolean;
 }

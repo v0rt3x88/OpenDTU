@@ -23,6 +23,7 @@ void WebApiClass::init(Scheduler& scheduler)
     _webApiEventlog.init(_server, scheduler);
     _webApiFile.init(_server, scheduler);
     _webApiFirmware.init(_server, scheduler);
+    _webApiGridMeasurement.init(_server, scheduler);
     _webApiGridprofile.init(_server, scheduler);
     _webApiI18n.init(_server, scheduler);
     _webApiInverter.init(_server, scheduler);

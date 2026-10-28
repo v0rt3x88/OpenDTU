@@ -70,6 +70,7 @@ bool ConfigurationClass::write()
     ntp["latitude"] = config.Ntp.Latitude;
     ntp["longitude"] = config.Ntp.Longitude;
     ntp["sunsettype"] = config.Ntp.SunsetType;
+    ntp["upload_grid_measurements"] = config.Ntp.UploadGridMeasurements;
 
     JsonObject dtu = doc["dtu"].to<JsonObject>();
     dtu["serial"] = config.Dtu.Serial;
@@ -227,6 +228,7 @@ bool ConfigurationClass::read()
     config.Ntp.Latitude = ntp["latitude"] | NTP_LATITUDE;
     config.Ntp.Longitude = ntp["longitude"] | NTP_LONGITUDE;
     config.Ntp.SunsetType = ntp["sunsettype"] | NTP_SUNSETTYPE;
+    config.Ntp.UploadGridMeasurements = ntp["upload_grid_measurements"] | NTP_UPLOAD_GRID_MEASUREMENTS;
 
     JsonObject dtu = doc["dtu"];
     config.Dtu.Serial = dtu["serial"] | DTU_SERIAL;

@@ -8,6 +8,7 @@
 #include "WebApi_eventlog.h"
 #include "WebApi_file.h"
 #include "WebApi_firmware.h"
+#include "WebApi_gridmeasurement.h"
 #include "WebApi_gridprofile.h"
 #include "WebApi_i18n.h"
 #include "WebApi_inverter.h"
@@ -55,6 +56,7 @@ private:
     WebApiEventlogClass _webApiEventlog;
     WebApiFileClass _webApiFile;
     WebApiFirmwareClass _webApiFirmware;
+    WebApiGridMeasurementClass _webApiGridMeasurement;
     WebApiGridProfileClass _webApiGridprofile;
     WebApiI18nClass _webApiI18n;
     WebApiInverterClass _webApiInverter;

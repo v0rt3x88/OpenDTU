@@ -5,6 +5,7 @@
 #include "Configuration.h"
 #include "Datastore.h"
 #include "Display_Graphic.h"
+#include "GridMeasurement.h"
 #include "I18n.h"
 #include "InverterSettings.h"
 #include "Led_Single.h"
@@ -111,6 +112,7 @@ void setup()
     LedSingle.init(scheduler);
 
     InverterSettings.init(scheduler);
+    GridMeasurement.init(scheduler);
 
     Datastore.init(scheduler);
     RestartHelper.init(scheduler);

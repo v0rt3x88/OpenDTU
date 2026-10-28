@@ -58,6 +58,72 @@
                     step="any"
                 />
 
+                <div class="form-check form-switch mb-3">
+                    <input
+                        id="uploadGridMeasurements"
+                        v-model="ntpConfigList.upload_grid_measurements"
+                        class="form-check-input"
+                        type="checkbox"
+                    />
+                    <label class="form-check-label" for="uploadGridMeasurements">
+                        {{ $t('ntpadmin.UploadGridMeasurements') }}
+                    </label>
+                    <div class="form-text">{{ $t('ntpadmin.UploadGridMeasurementsHint') }}</div>
+                </div>
+
+                <div
+                    v-if="gridMeasurementStatus"
+                    class="alert mb-3"
+                    :class="{
+                        'alert-secondary': !gridMeasurementStatus.enabled || gridMeasurementStatus.state === 'never',
+                        'alert-info': gridMeasurementStatus.enabled && gridMeasurementStatus.state === 'uploading',
+                        'alert-success': gridMeasurementStatus.enabled && gridMeasurementStatus.state === 'success',
+                        'alert-danger': gridMeasurementStatus.enabled && gridMeasurementStatus.state === 'error',
+                    }"
+                    role="status"
+                    aria-live="polite"
+                >
+                    <template v-if="!gridMeasurementStatus.enabled">
+                        {{ $t('ntpadmin.GridMeasurementDisabled') }}
+                    </template>
+                    <template v-else-if="gridMeasurementStatus.state === 'never'">
+                        {{ $t('ntpadmin.GridMeasurementNever') }}
+                    </template>
+                    <template v-else-if="gridMeasurementStatus.state === 'uploading'">
+                        {{ $t('ntpadmin.GridMeasurementUploading') }}
+                        <div v-if="gridMeasurementStatus.last_attempt > 0" class="small">
+                            {{ $t('ntpadmin.GridMeasurementLastAttempt', { time: formatGridMeasurementTime(gridMeasurementStatus.last_attempt) }) }}
+                        </div>
+                    </template>
+                    <template v-else-if="gridMeasurementStatus.state === 'success'">
+                        {{ $t('ntpadmin.GridMeasurementSuccess') }}
+                        <span v-if="gridMeasurementStatus.http_status > 0">
+                            ({{ $t('ntpadmin.GridMeasurementHttpStatus', { status: gridMeasurementStatus.http_status }) }})
+                        </span>
+                        <div v-if="gridMeasurementStatus.last_attempt > 0" class="small">
+                            {{ $t('ntpadmin.GridMeasurementLastAttempt', { time: formatGridMeasurementTime(gridMeasurementStatus.last_attempt) }) }}
+                        </div>
+                    </template>
+                    <template v-else-if="gridMeasurementStatus.state === 'error'">
+                        {{ $t('ntpadmin.GridMeasurementError') }}
+                        <span v-if="gridMeasurementStatus.http_status > 0">
+                            ({{ $t('ntpadmin.GridMeasurementHttpStatus', { status: gridMeasurementStatus.http_status }) }})
+                        </span>
+                        <span v-if="gridMeasurementStatus.error" class="font-monospace">
+                            ({{ gridMeasurementStatus.error }})
+                        </span>
+                        <div v-if="gridMeasurementStatus.last_attempt > 0" class="small">
+                            {{ $t('ntpadmin.GridMeasurementLastAttempt', { time: formatGridMeasurementTime(gridMeasurementStatus.last_attempt) }) }}
+                        </div>
+                        <div v-if="gridMeasurementStatus.last_success > 0" class="small">
+                            {{ $t('ntpadmin.GridMeasurementLastSuccess', { time: formatGridMeasurementTime(gridMeasurementStatus.last_success) }) }}
+                        </div>
+                    </template>
+                    <div v-if="gridMeasurementStatus.enabled && gridMeasurementStatus.skip_reason !== 'none'" class="small">
+                        {{ $t('ntpadmin.GridMeasurementLastSkip', { reason: $t(`ntpadmin.GridMeasurementSkipReason.${gridMeasurementStatus.skip_reason}`) }) }}
+                    </div>
+                </div>
+
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label">
                         {{ $t('ntpadmin.SunSetType') }}
@@ -97,6 +163,7 @@ import CardElement from '@/components/CardElement.vue';
 import InputElement from '@/components/InputElement.vue';
 import FormFooter from '@/components/FormFooter.vue';
 import type { AlertResponse } from '@/types/AlertResponse';
+import type { GridMeasurementStatus } from '@/types/GridMeasurementStatus';
 import type { NtpConfig } from '@/types/NtpConfig';
 import { authHeader, handleResponse } from '@/utils/authentication';
 import { defineComponent } from 'vue';
@@ -122,6 +189,8 @@ export default defineComponent({
             mcuTime: new Date(),
             localTime: new Date(),
             dataAgeInterval: 0,
+            gridMeasurementStatusInterval: 0,
+            gridMeasurementStatus: null as GridMeasurementStatus | null,
             alert: {} as AlertResponse,
             sunsetTypeList: [
                 { key: 0, value: 'OFFICIAL' },
@@ -141,6 +210,12 @@ export default defineComponent({
         this.getTimezoneList();
         this.getCurrentTime();
         this.initDataAgeing();
+        this.getGridMeasurementStatus();
+        this.gridMeasurementStatusInterval = window.setInterval(() => this.getGridMeasurementStatus(), 5000);
+    },
+    beforeUnmount() {
+        window.clearInterval(this.dataAgeInterval);
+        window.clearInterval(this.gridMeasurementStatusInterval);
     },
     methods: {
         initDataAgeing() {
@@ -178,6 +253,17 @@ export default defineComponent({
                     this.dataLoading = false;
                 });
         },
+        getGridMeasurementStatus() {
+            fetch('/api/gridmeasurement/status', { headers: authHeader() })
+                .then((response) => handleResponse(response, this.$emitter, this.$router, true))
+                .then((data: GridMeasurementStatus) => {
+                    this.gridMeasurementStatus = data;
+                })
+                .catch(() => undefined);
+        },
+        formatGridMeasurementTime(timestamp: number) {
+            return new Date(timestamp * 1000).toLocaleString();
+        },
         setCurrentTime() {
             const formData = new FormData();
             const time = {
@@ -204,6 +290,7 @@ export default defineComponent({
                 })
                 .then(() => {
                     this.getCurrentTime();
+                    this.getGridMeasurementStatus();
                 });
         },
         saveNtpConfig(e: Event) {

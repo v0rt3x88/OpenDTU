@@ -80,6 +80,7 @@ void WebApiNtpClass::onNtpAdminGet(AsyncWebServerRequest* request)
     root["longitude"] = config.Ntp.Longitude;
     root["latitude"] = config.Ntp.Latitude;
     root["sunsettype"] = config.Ntp.SunsetType;
+    root["upload_grid_measurements"] = config.Ntp.UploadGridMeasurements;
 
     WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
 }
@@ -134,6 +135,9 @@ void WebApiNtpClass::onNtpAdminPost(AsyncWebServerRequest* request)
         config.Ntp.Latitude = root["latitude"].as<double>();
         config.Ntp.Longitude = root["longitude"].as<double>();
         config.Ntp.SunsetType = root["sunsettype"].as<uint8_t>();
+        if (root["upload_grid_measurements"].is<bool>()) {
+            config.Ntp.UploadGridMeasurements = root["upload_grid_measurements"].as<bool>();
+        }
     }
 
     WebApi.writeConfig(retMsg);
