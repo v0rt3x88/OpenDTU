@@ -589,7 +589,6 @@
         "DisplayLanguage": "Displaysprache",
         "en": "Englisch",
         "de": "Deutsch",
-        "fr": "Französisch",
         "Leds": "LEDs",
         "EqualBrightness": "Gleiche Helligkeit",
         "LedBrightness": "LED {led} Helligkeit ({brightness})"

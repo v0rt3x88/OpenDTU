@@ -170,7 +170,7 @@
                                             :key="locale.code"
                                             :value="locale.code"
                                         >
-                                            {{ $t((index < 3 ? `deviceadmin.` : ``) + locale.name) }}
+                                            {{ $t((index < 2 ? `deviceadmin.` : ``) + locale.name) }}
                                         </option>
                                     </select>
                                 </div>
@@ -296,7 +296,6 @@ export default defineComponent({
             displayLocaleList: [
                 { code: 'en', name: 'en' },
                 { code: 'de', name: 'de' },
-                { code: 'fr', name: 'fr' },
             ],
             diagramModeList: [
                 { key: 0, value: 'off' },

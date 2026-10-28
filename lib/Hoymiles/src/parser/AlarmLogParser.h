@@ -24,8 +24,7 @@ enum class AlarmMessageType_t {
 
 enum class AlarmMessageLocale_t {
     EN,
-    DE,
-    FR
+    DE
 };
 
 typedef struct {
@@ -33,7 +32,6 @@ typedef struct {
     uint16_t MessageId;
     const char* Message_en;
     const char* Message_de;
-    const char* Message_fr;
 } AlarmMessage_t;
 
 class AlarmLogParser : public Parser {

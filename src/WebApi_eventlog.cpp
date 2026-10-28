@@ -31,9 +31,6 @@ void WebApiEventlogClass::onEventlogStatus(AsyncWebServerRequest* request)
         if (s == "de") {
             locale = AlarmMessageLocale_t::DE;
         }
-        if (s == "fr") {
-            locale = AlarmMessageLocale_t::FR;
-        }
     }
 
     auto inv = Hoymiles.getInverterBySerial(serial);

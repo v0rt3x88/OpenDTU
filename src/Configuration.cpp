@@ -379,7 +379,7 @@ void ConfigurationClass::migrate()
             strlcpy(config.Display.Locale, "de", sizeof(config.Display.Locale));
             break;
         case 2U:
-            strlcpy(config.Display.Locale, "fr", sizeof(config.Display.Locale));
+            strlcpy(config.Display.Locale, "en", sizeof(config.Display.Locale));
             break;
         }
     }
@@ -388,6 +388,10 @@ void ConfigurationClass::migrate()
         config.Logging.Default = ESP_LOG_VERBOSE;
         strlcpy(config.Logging.Modules[0].Name, "CORE", sizeof(config.Logging.Modules[0].Name));
         config.Logging.Modules[0].Level = ESP_LOG_ERROR;
+    }
+
+    if (config.Cfg.Version < 0x00012000 && strcmp(config.Display.Locale, "fr") == 0) {
+        strlcpy(config.Display.Locale, "en", sizeof(config.Display.Locale));
     }
 
     f.close();

@@ -5,8 +5,9 @@ import type { I18nOptions, IntlDateTimeFormat, IntlNumberFormat } from 'vue-i18n
 export const allLocales = [
     { code: 'en', name: 'English' },
     { code: 'de', name: 'Deutsch' },
-    { code: 'fr', name: 'Français' },
 ];
+
+const browserLocale = navigator.language.split('-')[0] ?? 'en';
 
 const dateTimeFormatsTemplate: IntlDateTimeFormat = {
     datetime: {
@@ -77,7 +78,7 @@ allLocales.forEach((locale) => {
 export const i18n = createI18n({
     legacy: false,
     globalInjection: true,
-    locale: navigator.language.split('-')[0],
+    locale: ['en', 'de'].includes(browserLocale) ? browserLocale : 'en',
     fallbackLocale: allLocales[0]?.code ?? 'en',
     messages,
     datetimeFormats: dateTimeFormats,

@@ -8,7 +8,7 @@
 #include <mutex>
 
 #define CONFIG_FILENAME "/config.json"
-#define CONFIG_VERSION 0x00011f00 // 0.1.31 // make sure to clean all after change
+#define CONFIG_VERSION 0x00012000 // 0.1.32 // make sure to clean all after change
 
 #define WIFI_MAX_SSID_STRLEN 32
 #define WIFI_MAX_PASSWORD_STRLEN 64
